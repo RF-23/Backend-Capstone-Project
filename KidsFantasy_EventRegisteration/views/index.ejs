@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KidsFantasy</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+</head>
+<body>
+
+    <!-- Logo on the side -->
+    <img src="/logo.png" alt="KidsFantasy Logo" class="logo" onclick="showForm()">
+
+    <!-- Description Text Box -->
+    <div class="description-box" id="description-box">
+        <p>
+            At KidsFantasy, we bring children’s dreams to life with unforgettable events tailored just for them. With branches in Sharjah, Dubai, and Abu Dhabi, we specialize in creating magical experiences that spark imagination and joy. Whether it’s birthdays, themed celebrations, or unique one-of-a-kind parties, our dedicated team is committed to ensuring every event is filled with fun, excitement, and lasting memories.
+        </p>
+        <p>
+            Our events range from superhero-themed adventures and princess tea parties to intergalactic space journeys and pirate treasure hunts. We offer a variety of customizable options, including venue selection, catering styles, and dynamic themes that cater to children of all ages. Our top priority is to provide a safe, creative, and thrilling atmosphere where kids can express themselves and celebrate their special moments.
+        </p>
+        <p>
+            With years of experience in the event industry, KidsFantasy is your trusted partner for turning any child's fantasies into reality.
+        </p>
+        <p>
+            <a href="#" onclick="showForm()">Click here to book an event</a>
+        </p>
+    </div>
+
+    <form id="event-form" action="/register" method="post" style="display: none;">
+        <h1 style="text-align: center;">KidsFantasy Event Registration</h1>
+        
+        <label for="event-date">Date of Event:</label>
+        <input type="date" id="event-date" name="event-date">
+
+        <select id="venue" name="venue">
+            <option value="sharjah">Sharjah</option>
+            <option value="dubai">Dubai</option>
+            <option value="abu-dhabi">Abu Dhabi</option>
+        </select>
+
+        <label for="event-type">Event Type:</label>
+        <select id="event-type" name="event-type">
+            <option value="birthday">Birthday</option>
+            <option value="celebration">Celebration</option>
+            <option value="others">Others</option>
+        </select>
+
+        <div id="event-type-others" style="display: none;">
+            <label for="event-type-description">Please Specify:</label>
+            <input type="text" id="event-type-description" name="event-type-description" placeholder="Enter description here...">
+        </div>
+
+        <label for="theme">Theme of Party:</label>
+        <select id="theme" name="theme">
+            <option value="none">None</option>
+            <option value="princess">Princess</option>
+            <option value="superhero">Superhero</option>
+            <option value="space">Space</option>
+            <option value="dinosaur">Dinosaur</option>
+            <option value="pirate">Pirate</option>
+        </select>
+
+        <label for="catering">Select Catering:</label>
+        <select id="catering" name="catering" onchange="toggleFoodOptions()">
+            <option value="self-cater">Self-Cater</option>
+            <option value="buffet">Buffet</option>
+        </select>
+
+        <div class="food-options" id="food-options" style="display: none;">
+            <label style="text-decoration: underline;">Food Styles</label><br>
+            <label for="intercontinental">Inter-Continental</label>
+            <input type="checkbox" id="intercontinental" name="food-style" value="intercontinental"><br>
+            
+            <label for="italian">Italian</label>
+            <input type="checkbox" id="italian" name="food-style" value="italian"><br>
+            
+            <label for="mexican">Mexican</label>
+            <input type="checkbox" id="mexican" name="food-style" value="mexican"><br>
+            
+            <label for="chinese">Chinese</label>
+            <input type="checkbox" id="chinese" name="food-style" value="chinese"><br>
+        </div>
+
+        <label for="weather-check">Do you want to check the weather of the selected venue on the selected date?</label>
+        <select id="weather-check" name="weather-check">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+        </select>
+
+        <div id="weather-section" style="display: none;">
+            <h2>Weather Information</h2>
+            <p id="weather-info">Weather information will be displayed here.</p>
+        </div>
+        <label for="additional-demands">Additional or Certain Demands:</label>
+        <textarea id="additional-demands" name="additional-demands" rows="4" placeholder="Enter your demands here..."></textarea>
+
+        <button type="submit">Register</button>
+    </form>
+    <div id="event-data" style="display: none;">
+        <h1>Submitted Event Data</h1>
+        <h2>Please mail us at: KidsFantasy@gmail.com for booking confirmation</h2>
+        <p id="event-info"></p>
+    </div>
+    </body>
+    <script>
+        function showForm() {
+            
+            document.querySelector('.logo').style.display = 'none';
+            document.getElementById('description-box').style.display = 'none';
+            
+            
+            document.getElementById('event-form').style.display = 'block';
+        }
+
+        function toggleFoodOptions() {
+    const catering = document.getElementById('catering').value;
+    const foodOptions = document.getElementById('food-options');
+    foodOptions.style.display = catering === 'buffet' ? 'block' : 'none';
+}
+
+
+        document.getElementById('event-type').addEventListener('change', function() {
+            const eventType = this.value;
+            const eventTypeOthers = document.getElementById('event-type-others');
+            eventTypeOthers.style.display = eventType === 'others' ? 'block' : 'none';
+        });
+
+        document.getElementById('weather-check').addEventListener('change', function() {
+            const weatherSection = document.getElementById('weather-section');
+            if (this.value === 'yes') {
+                fetchWeather();
+                weatherSection.style.display = 'block';
+            } else {
+                weatherSection.style.display = 'none';
+            }
+        });
+
+        function fetchWeather() {
+            const venue = document.getElementById('venue').value;
+            const eventDate = document.getElementById('event-date').value;
+            const apiKey = '2a683f596b274193884b98b1197a7f3c'; 
+            const url = `https://api.weatherbit.io/v2.0/current?city=${venue}&key=${apiKey}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const weatherInfo = document.getElementById('weather-info');
+                    if (data && data.data && data.data.length > 0) {
+                        const weather = data.data[0];
+                        weatherInfo.innerHTML = `
+                            <strong>Location:</strong> ${weather.city_name}<br>
+                            <strong>Temperature:</strong> ${weather.temp}°C<br>
+                            <strong>Weather:</strong> ${weather.weather.description}<br>
+                            <strong>Humidity:</strong> ${weather.rh}%<br>
+                            <strong>Wind Speed:</strong> ${weather.wind_spd} km/h<br>
+                        `;
+                    } else {
+                        weatherInfo.innerHTML = 'Weather data not available.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                    document.getElementById('weather-info').innerHTML = 'Error fetching weather data.';
+                });
+        }
+        document.getElementById('event-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    document.getElementById('event-form').style.display = 'none';
+
+    const formData = new FormData(this);
+    const formObject = {};
+    formData.forEach((value, key) => {
+        if (key === 'food-style') {
+            if (!formObject[key]) formObject[key] = [];
+            formObject[key].push(value);
+        } else {
+            formObject[key] = value;
+        }
+    });
+
+    fetch('/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams(formObject).toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        const eventDataDiv = document.getElementById('event-data');
+        const eventInfo = document.getElementById('event-info');
+        eventInfo.innerHTML = `
+            <strong>Additional Demands:</strong> ${data.additionalDemands}<br>
+            <strong>Venue:</strong> ${data.venue}<br>
+            <strong>Catering:</strong> ${data.catering}<br>
+            <strong>Food Styles:</strong> ${data.foodStyle.join(', ')}<br>
+            <strong>Event Type:</strong> ${data.eventType}<br>
+            <strong>Event Type Description:</strong> ${data.eventTypeDescription}<br>
+            <strong>Event Date:</strong> ${data.eventDate}<br>
+            <strong>Theme:</strong> ${data.theme}<br>
+            <strong>Weather Checked:</strong> ${data.weatherChecked ? 'Yes' : 'No'}<br>
+        `;
+        eventDataDiv.style.display = 'block'; 
+        document.getElementById('event-form').reset();
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+    </script>
+
+</body>
+</html>
