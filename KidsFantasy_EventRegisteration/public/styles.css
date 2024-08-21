@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #b23e3eb3;
+    background-color: #ae4545b3;
     margin: 0;
     padding: 20px;
     color: #333;
@@ -19,15 +19,21 @@ body {
 .description-box {
     position: fixed;
     top: 70px;
-    left: 550px;
+    left: 520px;
     width: 900px;
     height: 80%;
-    background-color:#a03c3c;
+    border-width: 2px; 
+    border-style: solid; 
+    border-color: #a33636;
     padding-left: 1%;
     border-radius: 2%;
     font-size: 24px;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.762);
+    text-align: left;
+    color: #810808;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+#hyperlink-text a:hover{
+    color: rgb(67, 1, 1) !important;/*important keyword ensures that the hover effect works on this hyperlink*/
 }
 
 form {

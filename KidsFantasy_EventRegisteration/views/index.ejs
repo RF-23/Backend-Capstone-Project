@@ -23,23 +23,28 @@
         <p>
             With years of experience in the event industry, KidsFantasy is your trusted partner for turning any child's fantasies into reality.
         </p>
-        <p>
-            <a href="#" onclick="showForm()">Click here to book an event</a>
+        <p id="hyperlink-text">
+            <a href="#" style="color: #6a0707;" onclick="showForm()">Click here to book an event</a>
         </p>
     </div>
 
+    <!-- Event Registration Form -->
     <form id="event-form" action="/register" method="post" style="display: none;">
         <h1 style="text-align: center;">KidsFantasy Event Registration</h1>
         
+        <!-- Input field for Event Date -->
         <label for="event-date">Date of Event:</label>
         <input type="date" id="event-date" name="event-date">
 
+        <!-- Venue Selection Dropdown List -->
+        <label for="venue">Venue:</label>
         <select id="venue" name="venue">
             <option value="sharjah">Sharjah</option>
             <option value="dubai">Dubai</option>
             <option value="abu-dhabi">Abu Dhabi</option>
         </select>
 
+        <!-- Event Type Selection Dropdown List -->
         <label for="event-type">Event Type:</label>
         <select id="event-type" name="event-type">
             <option value="birthday">Birthday</option>
@@ -47,11 +52,13 @@
             <option value="others">Others</option>
         </select>
 
+        <!-- If user clicks on others this input field will collect additional details -->
         <div id="event-type-others" style="display: none;">
             <label for="event-type-description">Please Specify:</label>
             <input type="text" id="event-type-description" name="event-type-description" placeholder="Enter description here...">
         </div>
 
+        <!-- Party Theme Dropdown List -->
         <label for="theme">Theme of Party:</label>
         <select id="theme" name="theme">
             <option value="none">None</option>
@@ -62,14 +69,16 @@
             <option value="pirate">Pirate</option>
         </select>
 
+        <!-- Type of Catering Dropdown List -->
         <label for="catering">Select Catering:</label>
         <select id="catering" name="catering" onchange="toggleFoodOptions()">
             <option value="self-cater">Self-Cater</option>
             <option value="buffet">Buffet</option>
         </select>
 
+        <!-- Once user selects buffet dropdown list appears -->
         <div class="food-options" id="food-options" style="display: none;">
-            <label style="text-decoration: underline;">Food Styles</label><br>
+            <label style="text-decoration: underline;">Cuisine:</label><br>
             <label for="intercontinental">Inter-Continental</label>
             <input type="checkbox" id="intercontinental" name="food-style" value="intercontinental"><br>
             
@@ -83,6 +92,8 @@
             <input type="checkbox" id="chinese" name="food-style" value="chinese"><br>
         </div>
 
+        <!-- For the entered date and venue weather is forecasted and displayed -->
+         <!-- Dropdown List -->
         <label for="weather-check">Do you want to check the weather of the selected venue on the selected date?</label>
         <select id="weather-check" name="weather-check">
             <option value="no">No</option>
@@ -93,11 +104,16 @@
             <h2>Weather Information</h2>
             <p id="weather-info">Weather information will be displayed here.</p>
         </div>
+
+        <!-- Additional Demands input field -->
         <label for="additional-demands">Additional or Certain Demands:</label>
         <textarea id="additional-demands" name="additional-demands" rows="4" placeholder="Enter your demands here..."></textarea>
 
+        <!-- Submit button to end registration -->
         <button type="submit">Register</button>
     </form>
+
+    <!-- All user inputted data displayed -->
     <div id="event-data" style="display: none;">
         <h1>Submitted Event Data</h1>
         <h2>Please mail us at: KidsFantasy@gmail.com for booking confirmation</h2>
@@ -105,28 +121,29 @@
     </div>
     </body>
     <script>
+        // from main page when user clicks on logo or hyperlink in the description box this function is activated through onclick 
         function showForm() {
-            
+            // hide logo and description box to only show the event registration form
             document.querySelector('.logo').style.display = 'none';
             document.getElementById('description-box').style.display = 'none';
-            
-            
             document.getElementById('event-form').style.display = 'block';
         }
 
+        //When user clicks on Buffet in catering then all the buffet options are displayed with a check box
         function toggleFoodOptions() {
-    const catering = document.getElementById('catering').value;
-    const foodOptions = document.getElementById('food-options');
-    foodOptions.style.display = catering === 'buffet' ? 'block' : 'none';
-}
+            const catering = document.getElementById('catering').value;
+            const foodOptions = document.getElementById('food-options');
+            foodOptions.style.display = catering === 'buffet' ? 'block' : 'none';
+        }
 
-
+        //Once user clicks on others in event-type they are ushered to specify by an input description box
         document.getElementById('event-type').addEventListener('change', function() {
             const eventType = this.value;
             const eventTypeOthers = document.getElementById('event-type-others');
             eventTypeOthers.style.display = eventType === 'others' ? 'block' : 'none';
         });
 
+        // if user clicks on yes to fetch weather data then weatherSection block is displayed
         document.getElementById('weather-check').addEventListener('change', function() {
             const weatherSection = document.getElementById('weather-section');
             if (this.value === 'yes') {
@@ -140,22 +157,31 @@
         function fetchWeather() {
             const venue = document.getElementById('venue').value;
             const eventDate = document.getElementById('event-date').value;
-            const apiKey = '2a683f596b274193884b98b1197a7f3c'; 
-            const url = `https://api.weatherbit.io/v2.0/current?city=${venue}&key=${apiKey}`;
-            
+            const apiKey = '2a683f596b274193884b98b1197a7f3c';
+            const url = `https://api.weatherbit.io/v2.0/forecast/daily?city=${venue}&key=${apiKey}`;
+
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data); // Log the entire API response for debugging
                     const weatherInfo = document.getElementById('weather-info');
-                    if (data && data.data && data.data.length > 0) {
-                        const weather = data.data[0];
-                        weatherInfo.innerHTML = `
-                            <strong>Location:</strong> ${weather.city_name}<br>
-                            <strong>Temperature:</strong> ${weather.temp}°C<br>
-                            <strong>Weather:</strong> ${weather.weather.description}<br>
-                            <strong>Humidity:</strong> ${weather.rh}%<br>
-                            <strong>Wind Speed:</strong> ${weather.wind_spd} km/h<br>
-                        `;
+                    if (data && data.data) {
+                        // Check the actual structure of data.data
+                        console.log(data.data); // Log the daily forecast array
+
+                        const forecast = data.data.find(day => day.datetime === eventDate);
+                        if (forecast) {
+                            weatherInfo.innerHTML = `
+                                <strong>Location:</strong> ${forecast.city_name || venue}<br>
+                                <strong>Date:</strong> ${forecast.datetime}<br>
+                                <strong>Temperature:</strong> ${forecast.temp}°C<br>
+                                <strong>Weather:</strong> ${forecast.weather.description}<br>
+                                <strong>Humidity:</strong> ${forecast.rh}%<br>
+                                <strong>Wind Speed:</strong> ${forecast.wind_spd} km/h<br>
+                            `;
+                        } else {
+                            weatherInfo.innerHTML = 'Weather data not available for the selected date.';
+                        }
                     } else {
                         weatherInfo.innerHTML = 'Weather data not available.';
                     }
@@ -165,47 +191,51 @@
                     document.getElementById('weather-info').innerHTML = 'Error fetching weather data.';
                 });
         }
+
+        // once user clicks on register/submit button we will display the event-form div through the EventListener
+        // to show all the user-inputted data and hide the form
         document.getElementById('event-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    document.getElementById('event-form').style.display = 'none';
+            event.preventDefault();
+            document.getElementById('event-form').style.display = 'none';
+            const formData = new FormData(this);
+            // creating a new object for each form submitted
+            const formObject = {};
+            formData.forEach((value, key) => {
+                if (key === 'food-style') {
+                    if (!formObject[key]) formObject[key] = [];
+                    formObject[key].push(value);
+                } else {
+                    formObject[key] = value;
+                }
+            });
 
-    const formData = new FormData(this);
-    const formObject = {};
-    formData.forEach((value, key) => {
-        if (key === 'food-style') {
-            if (!formObject[key]) formObject[key] = [];
-            formObject[key].push(value);
-        } else {
-            formObject[key] = value;
-        }
-    });
-
-    fetch('/register', {
-        method: 'POST',
+            fetch('/register', {
+        method: 'POST',  // Specifies that the request is a POST request
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded'  // Specifies the content type for the form data
         },
-        body: new URLSearchParams(formObject).toString()
+        body: new URLSearchParams(formObject).toString()  // Converts the form data to a URL-encoded string
     })
-    .then(response => response.json())
+    .then(response => response.json())  // Parses the response as JSON
     .then(data => {
-        const eventDataDiv = document.getElementById('event-data');
-        const eventInfo = document.getElementById('event-info');
+        const eventDataDiv = document.getElementById('event-data');  // Selects the div where event data will be displayed
+        const formattedFoodStyles = data.foodStyle.map(style => `<span>${style}</span>`).join('<br>');  // Formats the food styles array into a string with line breaks
+        const eventInfo = document.getElementById('event-info');  // Selects the element where the event information will be inserted
         eventInfo.innerHTML = `
             <strong>Additional Demands:</strong> ${data.additionalDemands}<br>
             <strong>Venue:</strong> ${data.venue}<br>
-            <strong>Catering:</strong> ${data.catering}<br>
-            <strong>Food Styles:</strong> ${data.foodStyle.join(', ')}<br>
+            <strong>Catering:</strong><br>
+            ${formattedFoodStyles}<br>
             <strong>Event Type:</strong> ${data.eventType}<br>
             <strong>Event Type Description:</strong> ${data.eventTypeDescription}<br>
             <strong>Event Date:</strong> ${data.eventDate}<br>
             <strong>Theme:</strong> ${data.theme}<br>
             <strong>Weather Checked:</strong> ${data.weatherChecked ? 'Yes' : 'No'}<br>
-        `;
-        eventDataDiv.style.display = 'block'; 
-        document.getElementById('event-form').reset();
+        `;  // Inserts the event data into the HTML 
+        eventDataDiv.style.display = 'block';  // Makes the event data div visible
+        document.getElementById('event-form').reset();  // Resets the form fields
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => console.error('Error:', error));  // Logs any errors to the console
 });
 
     </script>
