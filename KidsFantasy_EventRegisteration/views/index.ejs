@@ -7,8 +7,43 @@
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" type="text/css" href="/styles.css">
 </head>
+<style>
+    #mail {
+        border: 2px solid #6e0a0a; 
+        border-width: 1px;
+        padding: 8px;
+        font-size: 16px;
+        outline: none; 
+    }
+    #mail:focus {
+            border-color: #6e0a0a; 
+            background-color: #bd6c6c; 
+    }
+    select {
+        background-color: #bd6c6c !important; 
+        color: black; 
+        border: 1px solid #6e0a0a; 
+        padding: 10px; 
+        font-size: 16px; 
+        -webkit-appearance: none; 
+        -moz-appearance: none; 
+        appearance: none; 
+    }    
+    
+    select:hover {
+        background-color: #bd6c6c;
+        border-color: #6e0a0a; 
+        cursor: pointer;
+    }
+            
+    select:focus {
+        background-color: #bd6c6c;
+        border-color: #6e0a0a; 
+        cursor: pointer;
+        outline: none;
+    }
+</style>
 <body>
-
     <!-- Logo on the side -->
     <img src="/logo.png" alt="KidsFantasy Logo" class="logo" onclick="showForm()">
 
@@ -31,73 +66,86 @@
     <!-- Event Registration Form -->
     <form id="event-form" action="/register" method="post" style="display: none;">
         <h1 style="text-align: center;">KidsFantasy Event Registration</h1>
+
+        <!-- Input field for user to enter their Mail ID -->
+        <label for="mail">Email Address</label>
+        <input type="text" id="mail" name="mail" required>
         
         <!-- Input field for Event Date -->
-        <label for="event-date">Date of Event:</label>
-        <input type="date" id="event-date" name="event-date">
+        <label for="event-date">Date of the Event</label>
+        <input type="date" id="event-date" name="event-date" required>
 
+        <!-- Input field for Event Time for a 3 hours duration period -->
+        <label for="event-time">Time of the Event:</label>
+        <select id="event-time" name="event-time" required>
+            <option value="08:00-11:00">08:00 AM - 11:00 AM</option>
+            <option value="09:00-12:00">09:00 AM - 12:00 PM</option>
+            <option value="10:00-13:00">10:00 AM - 01:00 PM</option>
+            <option value="11:00-14:00">11:00 AM - 02:00 PM</option>
+            <option value="12:00-15:00">12:00 PM - 03:00 PM</option>
+            <option value="13:00-16:00">01:00 PM - 04:00 PM</option>
+            <option value="14:00-17:00">02:00 PM - 05:00 PM</option>
+            <option value="15:00-18:00">03:00 PM - 06:00 PM</option>
+            <option value="16:00-19:00">04:00 PM - 07:00 PM</option>
+            <option value="17:00-20:00">05:00 PM - 08:00 PM</option>
+            <option value="18:00-21:00">06:00 PM - 09:00 PM</option>
+        </select> 
+        
         <!-- Venue Selection Dropdown List -->
-        <label for="venue">Venue:</label>
-        <select id="venue" name="venue">
-            <option value="sharjah">Sharjah</option>
-            <option value="dubai">Dubai</option>
-            <option value="abu-dhabi">Abu Dhabi</option>
+        <label for="venue">Venue</label>
+        <select id="venue" name="venue" required>
+            <option value="Sharjah">Sharjah</option>
+            <option value="Dubai">Dubai</option>
+            <option value="Abu Dhabi">Abu Dhabi</option>
         </select>
 
         <!-- Event Type Selection Dropdown List -->
-        <label for="event-type">Event Type:</label>
-        <select id="event-type" name="event-type">
-            <option value="birthday">Birthday</option>
-            <option value="celebration">Celebration</option>
-            <option value="others">Others</option>
+        <label for="event-type">Event Type</label>
+        <select id="event-type" name="event-type" required>
+            <option value="Birthday">Birthday</option>
+            <option value="Celebration">Celebration</option>
+            <option value="Others">Others</option>
         </select>
 
         <!-- If user clicks on others this input field will collect additional details -->
         <div id="event-type-others" style="display: none;">
-            <label for="event-type-description">Please Specify:</label>
-            <input type="text" id="event-type-description" name="event-type-description" placeholder="Enter description here...">
+            <label for="event-type-description">Please Specify</label>
+            <input type="text" id="event-type-description" name="event-type-description">
         </div>
 
         <!-- Party Theme Dropdown List -->
-        <label for="theme">Theme of Party:</label>
-        <select id="theme" name="theme">
-            <option value="none">None</option>
-            <option value="princess">Princess</option>
-            <option value="superhero">Superhero</option>
-            <option value="space">Space</option>
-            <option value="dinosaur">Dinosaur</option>
-            <option value="pirate">Pirate</option>
+        <label for="theme">Theme of Party</label>
+        <select id="theme" name="theme" required>
+            <option value="None">None</option>
+            <option value="Princess">Princess</option>
+            <option value="Superhero">Superhero</option>
+            <option value="Space">Space</option>
+            <option value="Dinosaur">Dinosaur</option>
+            <option value="Pirate">Pirate</option>
         </select>
 
         <!-- Type of Catering Dropdown List -->
-        <label for="catering">Select Catering:</label>
-        <select id="catering" name="catering" onchange="toggleFoodOptions()">
-            <option value="self-cater">Self-Cater</option>
-            <option value="buffet">Buffet</option>
+        <label for="catering">Select Catering</label>
+        <select id="catering" name="catering" required onchange="toggleFoodOptions()">
+            <option value="Self-Cater">Self-Cater</option>
+            <option value="Buffet">Buffet</option>
         </select>
 
-        <!-- Once user selects buffet dropdown list appears -->
-        <div class="food-options" id="food-options" style="display: none;">
-            <label style="text-decoration: underline;">Cuisine:</label><br>
-            <label for="intercontinental">Inter-Continental</label>
-            <input type="checkbox" id="intercontinental" name="food-style" value="intercontinental"><br>
-            
-            <label for="italian">Italian</label>
-            <input type="checkbox" id="italian" name="food-style" value="italian"><br>
-            
-            <label for="mexican">Mexican</label>
-            <input type="checkbox" id="mexican" name="food-style" value="mexican"><br>
-            
-            <label for="chinese">Chinese</label>
-            <input type="checkbox" id="chinese" name="food-style" value="chinese"><br>
-        </div>
+        <!-- Food Options Dropdown List -->
+        <label id="food-options-label" for="food-style" style="display: none;">Select Food Style</label>
+        <select id="food-style" name="food-style" style="display: none;">
+            <option value="Intercontinental">Intercontinental</option>
+            <option value="Italian">Italian</option>
+            <option value="Mexican">Mexican</option>
+            <option value="Chinese">Chinese</option>
+        </select>
 
         <!-- For the entered date and venue weather is forecasted and displayed -->
          <!-- Dropdown List -->
-        <label for="weather-check">Do you want to check the weather of the selected venue on the selected date?</label>
-        <select id="weather-check" name="weather-check">
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
+        <label for="weather-check">Do you want to check the weather report for the event?</label>
+        <select id="weather-check" name="weather-check" required>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
         </select>
 
         <div id="weather-section" style="display: none;">
@@ -106,8 +154,8 @@
         </div>
 
         <!-- Additional Demands input field -->
-        <label for="additional-demands">Additional or Certain Demands:</label>
-        <textarea id="additional-demands" name="additional-demands" rows="4" placeholder="Enter your demands here..."></textarea>
+        <label for="additional-demands">Additional Demands</label>
+        <textarea id="additional-demands" name="additional-demands" rows="4"></textarea>
 
         <!-- Submit button to end registration -->
         <button type="submit">Register</button>
@@ -115,12 +163,31 @@
 
     <!-- All user inputted data displayed -->
     <div id="event-data" style="display: none;">
-        <h1>Submitted Event Data</h1>
-        <h2>Please mail us at: KidsFantasy@gmail.com for booking confirmation</h2>
+        <h1>Successful Form Submission</h1>
+        <h2>Please lookout for our mail regarding your booking confirmation</h2>
         <p id="event-info"></p>
     </div>
     </body>
     <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+        const emailInput = document.getElementById('mail');
+        
+            // Pattern to recognize valid email address for validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            emailInput.addEventListener('input', function() {
+                const email = emailInput.value;
+                
+                // Checks if the email matches the pattern
+                if (!emailPattern.test(email)) {
+                    emailInput.style.borderColor = 'red';
+                } else {
+                    emailInput.style.borderColor = '#6e0a0a';
+                }
+            });
+        });
+
         // from main page when user clicks on logo or hyperlink in the description box this function is activated through onclick 
         function showForm() {
             // hide logo and description box to only show the event registration form
@@ -130,23 +197,33 @@
         }
 
         //When user clicks on Buffet in catering then all the buffet options are displayed with a check box
+        // When user clicks on Buffet in catering then all the buffet options are displayed with a checkbox
         function toggleFoodOptions() {
             const catering = document.getElementById('catering').value;
-            const foodOptions = document.getElementById('food-options');
-            foodOptions.style.display = catering === 'buffet' ? 'block' : 'none';
+            const foodOptions = document.getElementById('food-style');
+            const foodOptionsLabel = document.getElementById('food-options-label');
+
+            if (catering === 'Buffet') {
+                foodOptions.style.display = 'block';
+                foodOptionsLabel.style.display = 'block';
+            } else {
+                foodOptions.style.display = 'none';
+                foodOptionsLabel.style.display = 'none';
+            }
         }
+
 
         //Once user clicks on others in event-type they are ushered to specify by an input description box
         document.getElementById('event-type').addEventListener('change', function() {
             const eventType = this.value;
             const eventTypeOthers = document.getElementById('event-type-others');
-            eventTypeOthers.style.display = eventType === 'others' ? 'block' : 'none';
+            eventTypeOthers.style.display = eventType === 'Others' ? 'block' : 'none';
         });
 
         // if user clicks on yes to fetch weather data then weatherSection block is displayed
         document.getElementById('weather-check').addEventListener('change', function() {
             const weatherSection = document.getElementById('weather-section');
-            if (this.value === 'yes') {
+            if (this.value === 'Yes') {
                 fetchWeather();
                 weatherSection.style.display = 'block';
             } else {
@@ -210,34 +287,33 @@
             });
 
             fetch('/register', {
-        method: 'POST',  // Specifies that the request is a POST request
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'  // Specifies the content type for the form data
-        },
-        body: new URLSearchParams(formObject).toString()  // Converts the form data to a URL-encoded string
-    })
-    .then(response => response.json())  // Parses the response as JSON
-    .then(data => {
-        const eventDataDiv = document.getElementById('event-data');  // Selects the div where event data will be displayed
-        const formattedFoodStyles = data.foodStyle.map(style => `<span>${style}</span>`).join('<br>');  // Formats the food styles array into a string with line breaks
-        const eventInfo = document.getElementById('event-info');  // Selects the element where the event information will be inserted
-        eventInfo.innerHTML = `
-            <strong>Additional Demands:</strong> ${data.additionalDemands}<br>
-            <strong>Venue:</strong> ${data.venue}<br>
-            <strong>Catering:</strong><br>
-            ${formattedFoodStyles}<br>
-            <strong>Event Type:</strong> ${data.eventType}<br>
-            <strong>Event Type Description:</strong> ${data.eventTypeDescription}<br>
-            <strong>Event Date:</strong> ${data.eventDate}<br>
-            <strong>Theme:</strong> ${data.theme}<br>
-            <strong>Weather Checked:</strong> ${data.weatherChecked ? 'Yes' : 'No'}<br>
-        `;  // Inserts the event data into the HTML 
-        eventDataDiv.style.display = 'block';  // Makes the event data div visible
-        document.getElementById('event-form').reset();  // Resets the form fields
-    })
-    .catch(error => console.error('Error:', error));  // Logs any errors to the console
-});
-
+            method: 'POST',  // Specifies that the request is a POST request
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'  // Specifies the content type for the form data
+            },
+            body: new URLSearchParams(formObject).toString()  // Converts the form data to a URL-encoded string
+        })
+        .then(response => response.json())  // Parses the response as JSON
+        .then(data => {
+            const eventDataDiv = document.getElementById('event-data');  // Selects the div where event data will be displayed
+            const eventInfo = document.getElementById('event-info');  // Selects the element where the event information will be inserted
+            eventInfo.innerHTML = `
+                <strong>Mail ID:</strong> ${data.mail}<br>
+                <strong>Event Date:</strong> ${data.eventDate}<br>
+                <strong>Venue:</strong> ${data.venue}<br>
+                <strong>Event Type:</strong> ${data.eventType} 
+                ${data.eventTypeDescription}
+                <br><strong>Theme:</strong> ${data.theme}<br>
+                <strong>Catering:</strong> ${data.catering} <br>
+                <strong>Food Style:</strong> ${data.foodStyle}<br>
+                <strong>Weather Checked:</strong> ${data.weatherChecked ? 'Yes' : 'No'}<br>
+                <strong>Additional Demands:</strong> ${data.additionalDemands}<br>
+                `;  // Inserts the event data into the HTML 
+            eventDataDiv.style.display = 'block';  // Makes the event data div visible
+            document.getElementById('event-form').reset();  // Resets the form fields
+        })
+        .catch(error => console.error('Error:', error));  // Logs any errors to the console
+    });
     </script>
 
 </body>

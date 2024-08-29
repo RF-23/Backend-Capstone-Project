@@ -57,28 +57,29 @@ app.get('/events', async (req, res) => {
 // Route handler for '/register' URL to handle form submission and insert data into MongoDB
 app.post('/register', async (req, res) => {
     try {
-        await client.connect();  
+        await client.connect();   
         console.log('Connected to MongoDB');  
         const db = client.db('KidsFantasy');  
         const collection = db.collection('Event'); 
         
         // Create an object with the event data from the form
         const eventData = {
-            additionalDemands: req.body['additional-demands'],  // Additional demands
+            mail: req.body['mail'],  // User Mail ID
+            eventDate: req.body['event-date'],  // Date of the event
             venue: req.body.venue,  // Venue
-            catering: req.body.catering,  // Catering option
-            foodStyle: Array.isArray(req.body['food-style']) ? req.body['food-style'] : [],  // Ensure 'food-style' is an array
             eventType: req.body['event-type'],  // Event type
             eventTypeDescription: req.body['event-type-description'],  // Description for 'Others' event type
-            eventDate: req.body['event-date'],  // Date of the event
             theme: req.body.theme,  // Party theme
-            weatherChecked: req.body['weather-check'] === 'yes'  // Boolean indicating if weather was checked
+            catering: req.body.catering,  // Catering option
+            foodStyle: req.body['food-style'],
+            weatherChecked: req.body['weather-check'] === 'Yes',  // Boolean indicating if weather was checked
+            additionalDemands: req.body['additional-demands'],  // Additional demands
         };
 
         // Insert the event data into the collection
         const result = await collection.insertOne(eventData);
         console.log('Event data inserted');  
-
+ 
         // Fetch the newly inserted event data
         const newEvent = await collection.findOne({ _id: result.insertedId });
         // Send the new event data as a JSON response
@@ -90,9 +91,10 @@ app.post('/register', async (req, res) => {
         await client.close();  
     }
 });
+ 
 
 // Start the server and listen for incoming requests on the specified port
 app.listen(port, () => {
     // Log server startup message
-    console.log("Server is running on port " + port);  
+    console.log("Server is running on port " + port);
 });
